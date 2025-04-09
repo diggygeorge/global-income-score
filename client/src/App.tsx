@@ -1,21 +1,29 @@
-import React from 'react';
-
-
-function EnterButton() {
-  return (
-    <button>
-      Enter
-    </button>
-  )
-}
+import React, { useState } from 'react';
 
 function App() {
+  const [text, setText] = useState('');
+  const [savedText, setSavedText] = useState('');
+
+  function handleChange(e:any) {
+    setText(e.target.value);
+  }
+
+  function handleClick() {
+    setSavedText(text);
+    setText('');
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-          <h1>Global Income Score</h1>
-          <EnterButton />
-      </header>
+    <div>
+      <h1>Global Income Score</h1>
+      <input
+        type="text"
+        value={text}
+        onChange={handleChange}
+        placeholder="Type something..."
+      />
+      <button onClick={handleClick}>Enter</button>
+      {savedText && <p>You entered: {savedText}</p>}
     </div>
   );
 }
