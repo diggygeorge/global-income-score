@@ -1,29 +1,69 @@
 import React, { useState } from 'react';
 
 function App() {
-  const [text, setText] = useState('');
-  const [savedText, setSavedText] = useState('');
+  const [text, setText] = useState({
+    Country: '',
+    State: '',
+    Metro: '',
+    HouseholdIncome: '',
+  });
+  const [savedText, setSavedText] = useState({
+    Country: '',
+    State: '',
+    Metro: '',
+    HouseholdIncome: '',
+  });
 
-  function handleChange(e:any) {
-    setText(e.target.value);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setText({...text, [e.target.name]: e.target.value});
   }
 
   function handleClick() {
-    setSavedText(text);
-    setText('');
+    setSavedText({...text});
   }
 
   return (
     <div>
       <h1>Global Income Score</h1>
+      <p>Country: 
       <input
+        name="Country"
         type="text"
-        value={text}
+        value={text.Country}
         onChange={handleChange}
         placeholder="Type something..."
       />
+      </p>
+      <p>State: 
+      <input 
+        name="State"
+        type="text"
+        value={text.State}
+        onChange={handleChange}
+        placeholder="Type something..."
+      />
+      </p>
+      <p>Metro: 
+      <input
+        name="Metro"
+        type="text"
+        value={text.Metro}
+        onChange={handleChange}
+        placeholder="Optional..."
+      />
+      </p>
+      <p>Household Income: 
+      <input
+        name="HouseholdIncome"
+        type="text"
+        value={text.HouseholdIncome}
+        onChange={handleChange}
+        placeholder="Optional..."
+      />
+      </p>
       <button onClick={handleClick}>Enter</button>
-      {savedText && <p>You entered: {savedText}</p>}
+      {savedText && (<p>What you entered: Country - {savedText.Country} State - {savedText.State} Metro - {savedText.Metro} Household Income - {savedText.HouseholdIncome}</p>)}
     </div>
   );
 }
