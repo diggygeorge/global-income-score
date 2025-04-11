@@ -6,12 +6,15 @@ function App() {
     State: '',
     Metro: '',
     HouseholdIncome: '',
+    amtPeople: '',
+
   });
   const [savedText, setSavedText] = useState({
     Country: '',
     State: '',
     Metro: '',
     HouseholdIncome: '',
+    amtPeople: '',
   });
 
 
@@ -53,17 +56,26 @@ function App() {
         placeholder="Optional..."
       />
       </p>
-      <p>Household Income: 
+      <p>Household Income without tax: 
       <input
         name="HouseholdIncome"
         type="text"
         value={text.HouseholdIncome}
         onChange={handleChange}
-        placeholder="Optional..."
+        placeholder="Type something..."
+      />
+      </p>
+      <p># of People in Household: 
+      <input
+        name="amtPeople"
+        type="text"
+        value={text.amtPeople}
+        onChange={handleChange}
+        placeholder="Type something..."
       />
       </p>
       <button onClick={handleClick}>Enter</button>
-      {savedText && (<p>What you entered: Country - {savedText.Country} State - {savedText.State} Metro - {savedText.Metro} Household Income - {savedText.HouseholdIncome}</p>)}
+      {savedText && (<p>What you entered: Country - {savedText.Country} State - {savedText.State} Metro - {savedText.Metro} Household Income - {savedText.HouseholdIncome} Amount of People in your Household - {savedText.amtPeople}</p>)}
     </div>
   );
 }
