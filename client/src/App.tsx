@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
+
+  const [message, setMessage] = useState('');
+
   const [text, setText] = useState({
     Country: '',
     State: '',
@@ -24,7 +27,15 @@ function App() {
 
   function handleClick() {
     setSavedText({...text});
+    console.log(message);
   }
+
+  useEffect(() => {
+    fetch('http://localhost:4000/')
+      .then((res) => res.text())
+      .then((data) => setMessage(data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div>
