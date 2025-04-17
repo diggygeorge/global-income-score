@@ -5,10 +5,17 @@
   "scripts": {
     "start": "node ./bin/www"
   },
+  "type": "module",
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
+    "debug": "^4.4.0",
+    "depd": "^2.0.0",
     "express": "^5.1.0",
-    "mysql": "^2.18.1"
+    "is-promise": "^4.0.0",
+    "jade": "^1.11.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.14.0",
+    "path-to-regexp": "^8.2.0"
   }
 }
