@@ -5,7 +5,9 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import indexRouter from './routes/api/country.js';
+import countryRouter from './routes/api/country.js';
+import stateRouter from './routes/api/state.js';
+import metroRouter from './routes/api/metro.js';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -26,7 +28,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api', indexRouter);
+app.use('/api', countryRouter);
+app.use('/api', stateRouter);
+app.use('/api', metroRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

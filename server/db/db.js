@@ -1,10 +1,13 @@
 
 import mysql from 'mysql2';
+import dotenv from 'dotenv';
+dotenv.config();
+
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'FalzarGaming123#',
-  database: 'income_data'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 })
 
 connection.connect((err) => {
@@ -17,7 +20,7 @@ connection.connect((err) => {
 
 export function getCountries() {
     return new Promise((resolve, reject) => {
-        const query = "SELECT name FROM country";
+        const query = "SELECT * FROM country";
         connection.query(query, (err, rows) => {
             if (err) {
                 return reject(err);
@@ -27,9 +30,9 @@ export function getCountries() {
     })
 }
 
-export function getStates(country_id) {
+export function getStates(country_name) {
     return new Promise((resolve, reject) => {
-        const query = `SELECT name FROM state WHERE country_id = ${country_id}`;
+        const query = `SELECT name FROM state WHERE country_name = '${country_name}'`;
         connection.query(query, (err, rows) => {
             if (err) {
                 return reject(err);
@@ -39,9 +42,9 @@ export function getStates(country_id) {
     })
 }
 
-export function getMetros(metro_id) {
+export function getMetros(state_name) {
     return new Promise((resolve, reject) => {
-        const query = `SELECT name FROM state WHERE state_id = ${country_id}`;
+        const query = `SELECT name FROM metro WHERE state_name = '${state_name}'`;
         connection.query(query, (err, rows) => {
             if (err) {
                 return reject(err);

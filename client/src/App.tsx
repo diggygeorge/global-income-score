@@ -1,87 +1,119 @@
 import React, { useState, useEffect } from 'react';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
 function App() {
 
-  const [message, setMessage] = useState('');
+  type Name =
+  {
+    name: string;
+  }
 
   // const values = [10000, 14999, 19999, 24999, 29999, 34999, 39999, 44999, 49999, 59999, 74999, 99999, 124999, 149999, 199999, 1000000000000]
-
-  const [text, setText] = useState({
-    Country: '',
-    State: '',
-    Metro: '',
-    HouseholdIncome: ''
-
-  });
-  const [savedText, setSavedText] = useState({
-    Country: '',
-    State: '',
-    Metro: '',
-    HouseholdIncome: ''
-  });
-
-  // When the input is changed
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setText({...text, [e.target.name]: e.target.value});
-  }
-
-  // When you click the button
-  function handleClick() {
-    setSavedText({...text});
-    console.log(message);
-  }
+  var countries: string[] = [];
 
   useEffect(() => {
     fetch('http://localhost:4000/api/countries')
+    .then((res) => res.json())
+    .then((data) => {
+      let i = 0;
+      while (i < data.length) {
+        countries[i] = data[i].name;
+        i += 1;
+      }
+    })
+    .catch((err) => console.log(err));
+  })
+
+
+  const [country, setCountry] = useState('');
+  const [state, setState] = useState('');
+  const [metro, setMetro] = useState('');
+  const [houseIncome, setHouseIncome] = useState<string | number>(0);
+
+  const [savedCountry, setSavedCountry] = useState('');
+  const [savedState, setSavedState] = useState('');
+  const [savedMetro, setSavedMetro] = useState('');
+  const [savedHouseIncome, setSavedHouseIncome] = useState<string | number>(0);
+
+  const [stateNames, setStateNames] = useState([]);
+  const [metroNames, setMetroNames] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/states?country=${encodeURIComponent(country)}`)
       .then((res) => res.json())
-      .then((data) => setMessage(data))
+      .then((data) => {
+        let states = data.map((s: Name) => s.name);
+        setStateNames(states);
+      })
       .catch((err) => console.log(err));
-  }, []);
+    }, [country])
+
+  useEffect(() => {
+    fetch(`http://localhost:4000/api/metros?state=${encodeURIComponent(state)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        let mets = data.map((s: Name) => s.name);
+        setMetroNames(mets);
+      })
+      .catch((err) => console.log(err));
+    }, [state])
+
+  // When you click the button
+  function handleClick() {
+    // figure something out
+    setSavedCountry(country);
+    setSavedState(state);
+    setSavedMetro(metro);
+    setSavedHouseIncome(houseIncome);
+
+    console.log("Countries: " + countries);
+    console.log("States: " + stateNames);
+    console.log("Metro Areas: " + metroNames);
+  }
 
   return (
     <div>
       <h1>Global Income Score</h1>
-      <p>Country: 
-      TODO: Query the names of countries and list all the elements out in the bar.
+      <Autocomplete
+        disablePortal
+        options={countries}
+        sx={{ width: 300 }}
+        value={country}
+        onInputChange={(event, newInputValue) => {
+          setCountry(newInputValue);
+        }}
+        renderInput={(params) => <TextField {...params} label="Choose a country"/>}
+      />
+      <Autocomplete
+        disablePortal
+        options={stateNames}
+        sx={{ width: 300 }}
+        value={state}
+        onInputChange={(event, newInputValue) => {
+          setState(newInputValue);
+          }}
+        renderInput={(params) => <TextField {...params} label="Choose a state (optional)"/>}
+      />
+      <Autocomplete
+        disablePortal
+        options={metroNames}
+        sx={{ width: 300 }}
+        value={metro}
+        onInputChange={(event, newInputValue) => {
+          setMetro(newInputValue);
+        }}
+        renderInput={(params) => <TextField {...params} label="Choose a metro area (optional)"/>}
+      />
       <input
-        name="Country"
-        type="text"
-        value={text.Country}
-        onChange={handleChange}
+        name="houseIncome"
+        type="number"
+        value={houseIncome}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setHouseIncome(event.currentTarget.value)}
         placeholder="Type something..."
       />
-      </p>
-      TODO: Get the country ID, query the names of states that have that country ID, list all the elements out in the bar.
-      <p>State: 
-      <input 
-        name="State"
-        type="text"
-        value={text.State}
-        onChange={handleChange}
-        placeholder="Type something..."
-      />
-      </p>
-      TODO: Get the state ID, query the names of metro areas that have that state ID, list all the elements out in the bar.
-      <p>Metro: 
-      <input
-        name="Metro"
-        type="text"
-        value={text.Metro}
-        onChange={handleChange}
-        placeholder="Optional..."
-      />
-      </p>
-      <p>Total Household Income: 
-      <input
-        name="HouseholdIncome"
-        type="text"
-        value={text.HouseholdIncome}
-        onChange={handleChange}
-        placeholder="Type something..."
-      />
-      </p>
       <button onClick={handleClick}>Enter</button>
-      {savedText && (<p>What you entered: Country - {savedText.Country} State - {savedText.State} Metro - {savedText.Metro} Household Income - {savedText.HouseholdIncome}</p>)}
+      {savedCountry && (<p>What you entered: Country - {savedCountry} State - {savedState} Metro - {savedMetro} Household Income - {savedHouseIncome}</p>)}
     </div>
   );
 }
