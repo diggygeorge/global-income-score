@@ -55,38 +55,22 @@ export function getMetros(state_name) {
 }
 
 export function getIncome(country, state, metro) {
+    let query = `SELECT * FROM country`;
     if (metro !== "") {
-        return new Promise((resolve, reject) => {
-            const query = `SELECT * FROM country WHERE name = ${metro}`;
-            connection.query(query, (err, rows) => {
-                if (err) {
-                    return reject(err);
-                }
-                return resolve(rows);
-            })
-        })
+        query = `SELECT less_than_10000, from_10000_to_14999, from_15000_to_19999, from_20000_to_24999, from_25000_to_29999, from_30000_to_34999, from_35000_to_39999, from_40000_to_44999, from_45000_to_49999, from_50000_to_59999, from_60000_to_74999, from_75000_to_99999, from_100000_to_124999, from_125000_to_149999, from_150000_to_199999, over_200000, sample_population FROM metro WHERE name = '${metro}'`;
     }
     else if (state !== "") {
-        return new Promise((resolve, reject) => {
-            const query = `SELECT * FROM state WHERE name = ${state}`;
-            connection.query(query, (err, rows) => {
-                if (err) {
-                    return reject(err);
-                }
-                return resolve(rows);
-            })
-        })
+        query = `SELECT less_than_10000, from_10000_to_14999, from_15000_to_19999, from_20000_to_24999, from_25000_to_29999, from_30000_to_34999, from_35000_to_39999, from_40000_to_44999, from_45000_to_49999, from_50000_to_59999, from_60000_to_74999, from_75000_to_99999, from_100000_to_124999, from_125000_to_149999, from_150000_to_199999, over_200000, sample_population FROM state WHERE name = '${state}'`;
     }
     else if (country !== "") {
-        return new Promise((resolve, reject) => {
-            const query = `SELECT * FROM country WHERE name = ${country}`;
-            connection.query(query, (err, rows) => {
-                if (err) {
-                    return reject(err);
-                }
-                return resolve(rows);
-            })
-        })
+        query = `SELECT less_than_10000, from_10000_to_14999, from_15000_to_19999, from_20000_to_24999, from_25000_to_29999, from_30000_to_34999, from_35000_to_39999, from_40000_to_44999, from_45000_to_49999, from_50000_to_59999, from_60000_to_74999, from_75000_to_99999, from_100000_to_124999, from_125000_to_149999, from_150000_to_199999, over_200000, sample_population FROM country WHERE name = '${country}'`;
     }
-
+    return new Promise((resolve, reject) => {
+        connection.query(query, (err, rows) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(rows);
+        })
+    })
 }
