@@ -29,6 +29,7 @@ function App() {
   const [state, setState] = useState("");
   const [metro, setMetro] = useState("");
   const [houseIncome, setHouseIncome] = useState(0);
+  const [people, setPeople] = useState(3);
   const [lowerBound, setLowerBound] = useState(0);
   const [upperBound, setUpperBound] = useState(0);
 
@@ -76,7 +77,9 @@ function App() {
         let population: number = distribution[16];
 
         i = 0;
-        while (values[i] < houseIncome) {
+        // Adjusts house income to equivalent for 3 person household.  (Ex: If there are 2 people in the household, income is multiplied by 1.5.)
+        let adjustedHouseIncome = houseIncome * (2.5 / people);
+        while (values[i] < adjustedHouseIncome) {
           sum += distribution[i]
           i++;
         }
@@ -92,7 +95,7 @@ function App() {
         setUpperBound(upper_bound);
       })
       .catch((err) => console.log(err));
-    }, [country, state, metro, houseIncome])
+    }, [country, state, metro, houseIncome, people])
 
   // When you click the button
   function handleClick() {
@@ -156,12 +159,38 @@ function App() {
           type="number"
           value={houseIncome}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            let newValue = +event.currentTarget.value;
-            if (!isNaN(newValue)) {
-              setHouseIncome(newValue);
+            let newIncome = +event.currentTarget.value;
+            if (!isNaN(newIncome)) {
+              setHouseIncome(newIncome);
+            }
+            if (newIncome > 999999999999) {
+              setHouseIncome(999999999999)
+            }
+            if (newIncome < 0) {
+              setHouseIncome(0)
             }
           }}
           placeholder="Enter your household income..."
+        />
+      </p>
+      <p>People in Household: 
+        <input
+          name="amtPeople"
+          type="number"
+          value={people}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            let newPeople = +event.currentTarget.value;
+            if (!isNaN(newPeople)) {
+              setPeople(newPeople);
+            }
+            if (newPeople > 99) {
+              setPeople(99)
+            }
+            if (newPeople < 1) {
+              setPeople(1)
+            }
+          }}
+          placeholder="Enter the amount of people in your house..."
         />
       </p>
       <button onClick={handleClick}>Enter</button>
