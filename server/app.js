@@ -9,6 +9,7 @@ import countryRouter from './routes/api/country.js';
 import stateRouter from './routes/api/state.js';
 import metroRouter from './routes/api/metro.js';
 import incomeRouter from './routes/api/income.js';
+import wageRouter from './routes/api/livingwage.js';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -33,6 +34,7 @@ app.use('/api', countryRouter);
 app.use('/api', stateRouter);
 app.use('/api', metroRouter);
 app.use('/api', incomeRouter);
+app.use('/api', wageRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
