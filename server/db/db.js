@@ -1,4 +1,3 @@
-
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -30,26 +29,27 @@ export function getCountries() {
     })
 }
 
-export function getStates(country_name) {
-    return new Promise((resolve, reject) => {
-        const query = `SELECT name FROM state WHERE country_name = '${country_name}'`;
-        connection.query(query, (err, rows) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(rows);
-        })
-    })
+export function getStates(country_id) {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT state_id AS id, name FROM state WHERE country_id = ?`;
+    connection.query(query, [country_id], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
 }
 
-export function getMetros(state_name) {
-    return new Promise((resolve, reject) => {
-        const query = `SELECT name FROM metro WHERE state_name = '${state_name}'`;
-        connection.query(query, (err, rows) => {
+
+export function getMetros(state_id) {
+    return new Promise((resolve, reject) => {  
+        const query = `SELECT metro_id AS id, name FROM metro WHERE state_id = ?`;
+        connection.query(query, [state_id], (err, rows) => {
             if (err) {
                 return reject(err);
             }
-            return resolve(rows);
+            resolve(rows);
         })
     })
 }
