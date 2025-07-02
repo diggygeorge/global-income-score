@@ -1,5 +1,7 @@
 import React from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
+const mapskey = import.meta.env.VITE_GOOGLE_API_KEY;
+
 
 const containerStyle = {
   overflow: 'hidden',
@@ -15,7 +17,7 @@ const center = {
 
 const GoogleMapsSection: React.FC = () => {
   return (
-    <LoadScript googleMapsApiKey={'AIzaSyC5XMc70ijzyKw1u0FQLVBLQ2jgZZV4lwo'}>
+    <LoadScript googleMapsApiKey={mapskey}>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
