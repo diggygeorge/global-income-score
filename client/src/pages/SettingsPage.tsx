@@ -9,16 +9,17 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 interface SettingsPageProps {
   onClose: () => void;
+  color: {background: string, textcolor: string}
 }
 
-export default function SettingsPage({ onClose }: SettingsPageProps) {
+export default function SettingsPage({ onClose, color }: SettingsPageProps) {
   
   const { setBackground, toggleTextColor, textColor,  } = useAppTheme();
 
+  const colors = color.background.split(',').map(p => p.trim().replace(")",""))
 
-
-  const [primaryColor, setPrimaryColor] = useState("#000000");
-  const [accentColor, setAccentColor] = useState("#000000");
+  const [primaryColor, setPrimaryColor] = useState(colors[1]);
+  const [accentColor, setAccentColor] = useState(colors[2]);
 
 
   useEffect(() => {

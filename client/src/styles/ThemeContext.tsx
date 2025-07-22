@@ -12,7 +12,7 @@ const ThemeContext = createContext<AppTheme | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [mainbackground, setBackground] = useState(
-    'linear-gradient(135deg, rgb(60, 0, 255), rgb(30, 0, 255))'
+    'linear-gradient(135deg, #000000, #000000)'
   );
 
   const [textColor, setTextColor] = useState('#ffffff');

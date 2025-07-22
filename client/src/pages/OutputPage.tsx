@@ -301,7 +301,7 @@ export default function OutputPage() {
               sx={{ width: '100%', height: '100%' }}
               onClick={(e) => e.stopPropagation()}
             >
-              <SettingsPage onClose={() => setShowSettings(false)} />
+              <SettingsPage onClose={() => setShowSettings(false)} color={{background: mainbackground, textcolor: textColor }}/>
             </Box>
           </Box>
         )}
