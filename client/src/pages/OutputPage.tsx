@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Paper,
@@ -16,31 +16,47 @@ import SettingsPage from './SettingsPage';
 import MenuButtons from '../components/MenuButtons';
 import { useAppTheme } from '../styles/ThemeContext';
 import type { Country } from '../components/CountryList';
+import type { State } from '../components/StateList';
+import type { Metro } from '../components/MetroAreaList';
+
 
 export default function OutputPage() {
   const [showSettings, setShowSettings] = useState(false);
   const { mainbackground, textColor } = useAppTheme();
 
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [selectedStateId, setSelectedStateId] = useState<number | null>(null);
+  const [selectedState, setSelectedState] = useState<State | null>(null);
   const [selectedMetro, setSelectedMetro] = useState<Metro | null>(null);
-  const [income, setIncome] = useState('');
 
-  interface Metro {
-  id: number;
-  name: string;
-}
+  const [income, setIncome] = useState(0);
+  const [savedIncome, setSavedIncome] = useState(0)
+  const [costOfLiving, setCostOfLiving] = useState(0)
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
-    setSelectedStateId(null);
+    console.log(country?.name)
+    setSelectedState(null);
     setSelectedMetro(null);
   };
 
-  const handleStateSelect = (stateId: number) => {
-    setSelectedStateId(stateId);
+  const handleStateSelect = (state: State) => {
+    setSelectedState(state);
+    console.log(state?.name)
     setSelectedMetro(null);
   };
+
+
+
+  useEffect(() => {
+     fetch(`http://localhost:4000/api/income?country=${selectedCountry?.name}&state=${selectedState?.name}&metro=${selectedMetro?.name}`)
+        .then((res) => res.json())
+        .then((data) =>
+          setCostOfLiving(data[0][0].living_wage * data[1][0].rpp * 0.01)     
+        )
+        .then(() => console.log(costOfLiving))
+        .catch(console.error)
+
+  }, [savedIncome])
 
   return (
     <Box
@@ -157,19 +173,18 @@ export default function OutputPage() {
               <Box sx={{ flex: 1 }}>
                 {selectedCountry && (
                   <>
-                    {console.log("Selected country passed to StateList:", selectedCountry)}
                     <StateList
                       country_id={selectedCountry.id}
-                      selectedStateId={selectedStateId}
+                      selectedState={selectedState}
                       onSelect={handleStateSelect}
                     />
                   </>
                 )}
               </Box>
               <Box sx={{ flex: 1 }}>
-                {selectedStateId && (
+                {selectedState && (
                   <MetroAreaList
-                    state_id={selectedStateId}
+                    state_id={selectedState.id}
                     selectedMetroId={selectedMetro?.id || null}
                     onSelect={setSelectedMetro}
                   />
@@ -191,8 +206,9 @@ export default function OutputPage() {
               <TextField
                 placeholder="Enter Income"
                 variant="outlined"
+                type="number"
                 value={income}
-                onChange={(e) => setIncome(e.target.value)}
+                onChange={(e) => setIncome(e.target.value as unknown as number)}
                 sx={{
                   width: '30%',
                   input: { color: textColor },
@@ -221,6 +237,7 @@ export default function OutputPage() {
                     backgroundColor: 'rgba(193, 199, 255, 0.36)',
                   },
                 }}
+                onClick={() => setSavedIncome(income)}
               >
                 Calculate
               </Button>
@@ -258,19 +275,7 @@ export default function OutputPage() {
             >
               <GoogleMapsSection />
             </Paper>
-
-            <Paper
-              elevation={4}
-              sx={{
-                ...glassEffect,
-                borderRadius: '70px',
-                width: '91%',
-                height: '31.8%',
-                padding: 4,
-              }}
-            >
-              <OutputList />
-            </Paper>
+            <OutputList cost={costOfLiving} income={savedIncome}/>
           </Paper>
         </Box>
 

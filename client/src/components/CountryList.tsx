@@ -24,6 +24,7 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
       .then((data) =>
         setCountries(
           data.map((c: any) => {
+            console.log("hi")
             return {
               id: c.country_id,
               name: c.name,

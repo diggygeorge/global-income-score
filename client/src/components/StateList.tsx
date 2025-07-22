@@ -3,19 +3,19 @@ import { List, ListItemButton, Paper, Typography, TextField, Box } from '@mui/ma
 import { Theme, glassEffect } from '../styles/Theme';
 import { useAppTheme } from '../styles/ThemeContext';
 
-interface State {
+export interface State {
   id: number;
   name: string;
 }
 
-interface Props {
-  country_id: number;
-  selectedStateId: number | null;
-  onSelect: (id: number) => void;
+interface StateListProps {
+  country_id: number
+  onSelect: (state: State) => void;
+  selectedState: State | null;
 }
 
-export default function StateList({ country_id, selectedStateId, onSelect }: Props) {
-  console.log("Recieved: ", country_id);
+
+export default function StateList({ country_id, selectedState, onSelect }: StateListProps) {
   const { textColor } = useAppTheme();
   const [search, setSearch] = useState('');
   const [states, setStates] = useState<State[]>([]);
@@ -35,14 +35,12 @@ export default function StateList({ country_id, selectedStateId, onSelect }: Pro
       return res.json();
     })
     .then(data => {
-      console.log('Fetched states data:', data);
       setStates(data);
      
     })
 }, [country_id]);
 
   const filteredStates = states; 
-  console.log('Filtered states:', filteredStates);
 
   return (
     <Paper
@@ -94,8 +92,8 @@ export default function StateList({ country_id, selectedStateId, onSelect }: Pro
         {filteredStates.map((state) => (
           <ListItemButton
             key={`state-${state.id}`}
-            selected={selectedStateId === state.id}
-            onClick={() => onSelect(state.id)}
+            selected={selectedState?.id === state.id}
+            onClick={() => onSelect(state)}
               sx={{
                 padding: 2,
                 color: textColor,

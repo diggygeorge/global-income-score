@@ -98,7 +98,10 @@ export default function MetroAreaList({ state_id, selectedMetroId, onSelect }: P
           <ListItemButton
             key={`metro-${metro.id}`}
             selected={selectedMetroId === metro.id}
-            onClick={() => onSelect(metro)}
+            onClick={() => {
+                            onSelect(metro)
+                            console.log(metro?.name)
+                          }}
               sx={{
                 padding: 2,
                 color: textColor,

@@ -3,8 +3,21 @@ import { Box, Typography, Paper } from '@mui/material';
 import { glassEffect } from '../styles/Theme'; 
 import { useAppTheme } from '../styles/ThemeContext';
 
-export default function OutputList() {
+type CostProps = {
+  cost: number
+  income: number
+}
+
+export default function OutputList({cost, income}: CostProps) {
+
+  // Inputs: cost of living, input income
   const { textColor } = useAppTheme();
+
+  const numberList = []
+
+  for (let i = 0; i <= 5; i += 1) {
+    numberList.push(<Typography sx={{ color: textColor, fontSize: '0.875rem' }}>{Math.max(income, cost) <= 250000 ? i * 50 : Math.round(i/5000 * income)}k</Typography>)
+  }
 
   return (
     <Paper
@@ -46,7 +59,8 @@ export default function OutputList() {
             letterSpacing: '-0.2px',
           }}
         >
-          Your income is less than the cost of living for this area
+          {income < cost ? 'Your income is less than the cost of living for this area' : 'Your income meets the cost of living for this area'}
+          
         </Typography>
 
         <Box
@@ -77,10 +91,10 @@ export default function OutputList() {
               <Paper
                 elevation={4}
                 sx={{
-                  width: '50%',
+                  width: `${Math.max(income, cost) <= 250000 ? income/2500 : 100}%`,
                   height: '100%',
                   borderRadius: '40px 0 0 40px',
-                  backgroundColor: 'rgba(255, 0, 0, 0.4)',
+                  backgroundColor: 'rgba(38, 0, 255, 0.5)',
                   backdropFilter: 'blur(12px)',
                   boxShadow: '0 12px 32px rgba(0, 0, 0, 0.2)',
                   position: 'relative',
@@ -88,10 +102,10 @@ export default function OutputList() {
               >
                 <Box
                   sx={{
-                    width: '150%',
+                    width: `${100 * cost/income}%`,
                     height: '100%',
                     borderRadius: '40px 0 0 40px',
-                    backgroundColor: 'rgba(38, 0, 255, 0.5)',
+                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
                     backdropFilter: 'blur(12px)',
                     position: 'absolute',
                   }}
@@ -133,8 +147,7 @@ export default function OutputList() {
                 justifyContent: 'space-between',
               }}
             >
-              <Typography sx={{ color: textColor, fontSize: '0.875rem' }}>min</Typography>
-              <Typography sx={{ color: textColor, fontSize: '0.875rem' }}>max</Typography>
+              {numberList}
             </Box>
           </Box>
         </Box>
@@ -226,7 +239,7 @@ export default function OutputList() {
           }}
         >
           <Typography sx={{ fontSize: '0.75rem', fontWeight: 500, color: textColor }}>
-            +$1,200
+            {income >= cost ? '+' : ''}{Math.round(income - cost)}
           </Typography>
         </Paper>
 
@@ -252,8 +265,8 @@ export default function OutputList() {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{ fontSize: '0.75rem', fontWeight: 500, color: 'rgb(0, 255, 42)' }}>
-            yes
+          <Typography sx={{ fontSize: '0.75rem', fontWeight: 500, color: `${income >= cost ? 'rgb(0, 255, 42)' : 'rgb(255, 0, 42)'}` }}>
+            {income === 0 && cost === 0 ? '' : income >= cost ? 'yes' : 'no'}
           </Typography>
         </Paper>
       </Box>
