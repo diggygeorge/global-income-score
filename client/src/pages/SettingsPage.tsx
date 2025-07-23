@@ -14,7 +14,7 @@ interface SettingsPageProps {
 
 export default function SettingsPage({ onClose, color }: SettingsPageProps) {
   
-  const { setBackground, toggleTextColor, textColor,  } = useAppTheme();
+  const { setBackground, toggleTextColor, textColor, setDefault } = useAppTheme();
 
   const colors = color.background.split(',').map(p => p.trim().replace(")",""))
 
@@ -169,7 +169,42 @@ export default function SettingsPage({ onClose, color }: SettingsPageProps) {
 </Box>
 
 </Paper>
-      </Paper>
+    <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: '48px',
+    marginLeft: 3,
+    marginTop: 2,
+    gap: 2,
+  }}
+>
+  <Button
+    onClick={setDefault}
+    variant="outlined"
+    sx={{
+      borderRadius: '25%',
+      minWidth: '40px',
+      width: '100px',
+      height: '40px',
+      padding: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(255,255,255,0.08)',
+      borderColor: Theme.border,
+      color: textColor === '#ffffff' ? '#ffffff' : '#000000',
+      '&:hover': {
+        backgroundColor: Theme.highlight,
+      },
+    }}
+  >
+    Default
+  </Button>
+</Box>
+
+</Paper>
     </Box>
   );
 }

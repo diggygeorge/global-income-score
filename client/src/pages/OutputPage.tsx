@@ -32,6 +32,8 @@ export default function OutputPage() {
   const [savedIncome, setSavedIncome] = useState(0)
   const [costOfLiving, setCostOfLiving] = useState(0)
 
+  const [loading, setLoading] = useState(false)
+
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
     console.log(country?.name)
@@ -48,6 +50,7 @@ export default function OutputPage() {
 
 
   useEffect(() => {
+    
      fetch(`http://localhost:4000/api/income?country=${selectedCountry?.name}&state=${selectedState?.name}&metro=${selectedMetro?.name}`)
         .then((res) => res.json())
         .then((data) =>
@@ -55,8 +58,9 @@ export default function OutputPage() {
         )
         .then(() => console.log(costOfLiving))
         .catch(console.error)
+        .finally(() => setLoading(false))
 
-  }, [savedIncome])
+  }, [loading])
 
   return (
     <Box
@@ -96,7 +100,7 @@ export default function OutputPage() {
             height: '5%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-between',
             padding: 2,
             gap: 2,
             backgroundColor: Theme.glass,
@@ -237,7 +241,9 @@ export default function OutputPage() {
                     backgroundColor: 'rgba(193, 199, 255, 0.36)',
                   },
                 }}
-                onClick={() => setSavedIncome(income)}
+                onClick={() => {
+                                  setLoading(true)
+                                  setSavedIncome(income)}}
               >
                 Calculate
               </Button>

@@ -6,6 +6,7 @@ export type AppTheme = {
   setBackground: (val: string) => void;
   textColor: string;
   toggleTextColor: () => void;
+  setDefault: () => void;
 };
 
 const ThemeContext = createContext<AppTheme | undefined>(undefined);
@@ -21,9 +22,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     setTextColor((prev) => (prev === '#ffffff' ? '#000000' : '#ffffff'));
   };
 
+  const setDefault = () => {
+    setTextColor('#ffffff')
+    setBackground('linear-gradient(135deg, #000000, #000000)')
+  }
+
   return (
     <ThemeContext.Provider
-      value={{ mainbackground, setBackground, textColor, toggleTextColor }}
+      value={{ mainbackground, setBackground, textColor, toggleTextColor, setDefault }}
     >
       {children}
     </ThemeContext.Provider>
