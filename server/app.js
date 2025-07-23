@@ -19,8 +19,6 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
-const cors = require('cors');
-
 app.use(cors({
   origin: 'https://global-income-score-mu.vercel.app'
 }));
