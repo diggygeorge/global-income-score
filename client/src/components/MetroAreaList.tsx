@@ -26,7 +26,7 @@ export default function MetroAreaList({ state_id, selectedMetroId, onSelect }: P
   }
 
   setSearch('');
-  fetch(`http://localhost:4000/api/metros?state_id=${state_id}`)
+  fetch(`https://global-income-score.onrender.com/api/metros?state_id=${state_id}`)
     .then(res => {
       if (!res.ok) {
         throw new Error('Failed to fetch metros');

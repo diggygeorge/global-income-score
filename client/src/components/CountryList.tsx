@@ -19,7 +19,7 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
   const [countries, setCountries] = useState<Country[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/countries')
+    fetch('https://global-income-score.onrender.com/api/countries')
       .then((res) => res.json())
       .then((data) =>
         setCountries(

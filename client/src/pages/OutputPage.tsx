@@ -51,7 +51,7 @@ export default function OutputPage() {
 
   useEffect(() => {
     
-     fetch(`http://localhost:4000/api/income?country=${selectedCountry?.name}&state=${selectedState?.name}&metro=${selectedMetro?.name}`)
+     fetch(`https://global-income-score.onrender.com/api/income?country=${selectedCountry?.name}&state=${selectedState?.name}&metro=${selectedMetro?.name}`)
         .then((res) => res.json())
         .then((data) =>
           setCostOfLiving(data[0][0].living_wage * data[1][0].rpp * 0.01)     
