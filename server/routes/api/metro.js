@@ -1,6 +1,7 @@
 import express from 'express';
-import { getMetros } from '../../db/db.js';
+import { createClient } from '@supabase/supabase-js'
 
+const supabase = createClient(process.env.DATABASE_URL,process.env.DATABASE_KEY);
 var router = express.Router();
 
 router.get('/metros', async (req, res, next) => {
@@ -9,11 +10,15 @@ router.get('/metros', async (req, res, next) => {
     if (isNaN(id)) {
       return res.status(400).json({ error: 'Invalid or missing state_id' });
     }
-    console.log('Fetching metros for state_id:', id);
-    const metros = await getMetros(id);
-    res.status(200).send(metros);
-  } catch (err) {
-    next(err);
+    console.log('Fetching metros for state_ud:', id);
+    const { data, error } = await supabase
+      .from("metros")
+      .select("metro_id, metro_name")
+      .eq("state_id", id)
+
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
   }
 });
 

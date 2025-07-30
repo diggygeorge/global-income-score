@@ -1,6 +1,7 @@
 import express from 'express';
-import { getStates } from '../../db/db.js';
+import { createClient } from '@supabase/supabase-js'
 
+const supabase = createClient(process.env.DATABASE_URL,process.env.DATABASE_KEY);
 var router = express.Router();
 
 router.get('/states', async (req, res, next) => {
@@ -10,10 +11,14 @@ router.get('/states', async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid or missing country_id' });
     }
     console.log('Fetching states for country_id:', id);
-    const states = await getStates(id);
-    res.status(200).send(states);
-  } catch (err) {
-    next(err);
+    const { data, error } = await supabase
+      .from("states")
+      .select("state_id, state_name")
+      .eq("country_id", id)
+
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
   }
 });
 

@@ -1,14 +1,16 @@
 import express from 'express';
-import { getCountries } from '../../db/db.js';
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(process.env.DATABASE_URL,process.env.DATABASE_KEY);
 
 var router = express.Router();
 
-router.get('/countries', async (req, res, next) => {
+router.get('/countries', async (_, res, next) => {
   try {
-    const countries = await getCountries();
-    res.status(200).send(countries);
-  } catch (err) {
-    next(err)
+    const { data, error } = await supabase.from("countries").select();
+    res.status(200).send(data);
+  } catch (error) {
+    next(error)
   }
 })
 

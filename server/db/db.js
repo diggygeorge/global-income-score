@@ -10,13 +10,10 @@ const connection = mysql.createConnection({
   port: process.env.DB_PORT
 })
 
-connection.connect((err) => {
-    if (err) {
-      console.error('Error connecting to MySQL:', err);
-      return;
-    }
-    console.log('Successfully connected to MySQL!');
-  });
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(process.env.DATABASE_URL,process.env.DATABASE_KEY);
+
 
 export function getCountries() {
     return new Promise((resolve, reject) => {

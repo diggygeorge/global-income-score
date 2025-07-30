@@ -40,7 +40,9 @@ export default function StateList({ country_id, selectedState, onSelect }: State
     })
 }, [country_id]);
 
-  const filteredStates = states; 
+  const filteredStates = states.filter(c =>
+    c.name.toLowerCase().includes(search.toLowerCase())
+  );; 
 
   return (
     <Paper

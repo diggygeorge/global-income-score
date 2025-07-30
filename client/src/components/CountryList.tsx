@@ -17,14 +17,15 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
   const { textColor } = useAppTheme();
   const [search, setSearch] = useState('');
   const [countries, setCountries] = useState<Country[]>([]);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     fetch('https://global-income-score.onrender.com/api/countries')
       .then((res) => res.json())
       .then((data) =>
         setCountries(
           data.map((c: any) => {
-            console.log("hi")
             return {
               id: c.country_id,
               name: c.name,
@@ -32,7 +33,8 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
           })
         )
       )
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   const filteredCountries = countries.filter(c =>
