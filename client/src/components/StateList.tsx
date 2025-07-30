@@ -4,8 +4,8 @@ import { Theme, glassEffect } from '../styles/Theme';
 import { useAppTheme } from '../styles/ThemeContext';
 
 export interface State {
-  id: number;
-  name: string;
+  state_id: number;
+  state_name: string;
 }
 
 interface StateListProps {
@@ -35,13 +35,14 @@ export default function StateList({ country_id, selectedState, onSelect }: State
       return res.json();
     })
     .then(data => {
+      console.log(data)
       setStates(data);
      
     })
 }, [country_id]);
 
   const filteredStates = states.filter(c =>
-    c.name.toLowerCase().includes(search.toLowerCase())
+    c.state_name.toLowerCase().includes(search.toLowerCase())
   );; 
 
   return (
@@ -93,8 +94,8 @@ export default function StateList({ country_id, selectedState, onSelect }: State
         <List disablePadding>
         {filteredStates.map((state) => (
           <ListItemButton
-            key={`state-${state.id}`}
-            selected={selectedState?.id === state.id}
+            key={`state-${state.state_id}`}
+            selected={selectedState?.state_id === state.state_id}
             onClick={() => onSelect(state)}
               sx={{
                 padding: 2,
@@ -111,7 +112,7 @@ export default function StateList({ country_id, selectedState, onSelect }: State
                 },
               }}
             >
-              <Typography>{state.name}</Typography>
+              <Typography>{state.state_name}</Typography>
             </ListItemButton>
           ))}
         </List>

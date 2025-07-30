@@ -5,7 +5,7 @@ import { useAppTheme } from '../styles/ThemeContext';
 
 export interface Country {
   id: number;
-  name: string;
+  country_name: string;
 }
 
 interface CountryListProps {
@@ -21,25 +21,38 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
 
   useEffect(() => {
     setLoading(true)
-    fetch('https://global-income-score.onrender.com/api/countries')
-      .then((res) => res.json())
-      .then((data) =>
-        setCountries(
-          data.map((c: any) => {
+    const fetchCountries = async () => {
+    let data = []
+    try {
+      const res = await fetch('https://global-income-score.onrender.com/api/countries')
+      if (!res.ok) {
+        throw new Error('Failed to fetch countries');
+      }
+      const raw = await res.text();
+      data = raw ? JSON.parse(raw) : [];
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      setCountries(data.map((c: any) => {
             return {
-              id: c.country_id,
-              name: c.name,
+              id: c.id,
+              country_name: c.country_name,
             };
-          })
-        )
-      )
-      .catch(console.error)
-      .finally(() => setLoading(false));
+          }))
+      setLoading(false);
+    }
+  }
+
+  fetchCountries()
   }, []);
 
+  
   const filteredCountries = countries.filter(c =>
-    c.name.toLowerCase().includes(search.toLowerCase())
+    c.country_name.toLowerCase().includes(search?.toLowerCase())
   );
+
   return (
     <Paper
       elevation={4}
@@ -93,7 +106,7 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
         {filteredCountries.map((country) => (
           <ListItemButton
             selected={selectedCountry?.id === country.id}
-            onClick={() => onSelect({ id: country.id, name: country.name })}
+            onClick={() => onSelect({ id: country.id, country_name: country.country_name })}
             sx={{
               padding: 2,
               color: textColor,
@@ -109,7 +122,7 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
               },
             }}
           >
-            <Typography>{country.name}</Typography>
+            <Typography>{country.country_name}</Typography>
           </ListItemButton>
           ))}
         </List>

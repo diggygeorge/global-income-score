@@ -36,25 +36,26 @@ export default function OutputPage() {
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
-    console.log(country?.name)
+    console.log(country?.country_name)
     setSelectedState(null);
     setSelectedMetro(null);
   };
 
   const handleStateSelect = (state: State) => {
     setSelectedState(state);
-    console.log(state?.name)
+    console.log(state?.state_name)
     setSelectedMetro(null);
   };
 
-
-
   useEffect(() => {
-    
-     fetch(`https://global-income-score.onrender.com/api/income?country=${selectedCountry?.name}&state=${selectedState?.name}&metro=${selectedMetro?.name}`)
+     fetch(`https://global-income-score.onrender.com/api/income?country=${selectedCountry?.country_name}&state=${selectedState?.state_name}&metro=${selectedMetro?.metro_name}`)
         .then((res) => res.json())
-        .then((data) =>
-          setCostOfLiving(data[0][0].living_wage * data[1][0].rpp * 0.01)     
+        .then((data) => {
+          console.log("Income:", data)
+          if (data.length > 0) {
+          setCostOfLiving(416 * data[0].rpp)
+          }
+        }  
         )
         .then(() => console.log(costOfLiving))
         .catch(console.error)
@@ -188,8 +189,8 @@ export default function OutputPage() {
               <Box sx={{ flex: 1 }}>
                 {selectedState && (
                   <MetroAreaList
-                    state_id={selectedState.id}
-                    selectedMetroId={selectedMetro?.id || null}
+                    state_id={selectedState.state_id}
+                    selectedMetroId={selectedMetro?.metro_id || null}
                     onSelect={setSelectedMetro}
                   />
                 )}

@@ -4,8 +4,8 @@ import { Theme, glassEffect } from '../styles/Theme';
 import { useAppTheme } from '../styles/ThemeContext';
 
 export interface Metro {
-  id: number;
-  name: string;
+  metro_id: number;
+  metro_name: string;
 }
 
 interface Props {
@@ -44,7 +44,7 @@ export default function MetroAreaList({ state_id, selectedMetroId, onSelect }: P
 }, [state_id]);
 
   const filteredMetros = metros.filter(metro =>
-    metro.name.toLowerCase().includes(search.toLowerCase())
+    metro.metro_name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -96,11 +96,11 @@ export default function MetroAreaList({ state_id, selectedMetroId, onSelect }: P
         <List disablePadding>
         {filteredMetros.map((metro) => (
           <ListItemButton
-            key={`metro-${metro.id}`}
-            selected={selectedMetroId === metro.id}
+            key={`metro-${metro.metro_id}`}
+            selected={selectedMetroId === metro.metro_id}
             onClick={() => {
                             onSelect(metro)
-                            console.log(metro?.name)
+                            console.log(metro?.metro_name)
                           }}
               sx={{
                 padding: 2,
@@ -117,7 +117,7 @@ export default function MetroAreaList({ state_id, selectedMetroId, onSelect }: P
                 },
               }}
             >
-              <Typography>{metro.name}</Typography>
+              <Typography>{metro.metro_name}</Typography>
             </ListItemButton>
           ))}
         </List>
