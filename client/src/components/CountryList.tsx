@@ -17,10 +17,8 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
   const { textColor } = useAppTheme();
   const [search, setSearch] = useState('');
   const [countries, setCountries] = useState<Country[]>([]);
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setLoading(true)
     const fetchCountries = async () => {
     let data = []
     try {
@@ -41,7 +39,6 @@ export default function CountryList({ onSelect, selectedCountry }: CountryListPr
               country_name: c.country_name,
             };
           }))
-      setLoading(false);
     }
   }
 
