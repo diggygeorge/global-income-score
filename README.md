@@ -16,7 +16,7 @@ Here are some of its features:
 
 ## 🔨 Tools
 
-Frontend: Made with **Node.js**, **Typescript**
+Frontend: Made with **Node.js**, **Typescript** with the help of my good friend, Milton.  Check out his GitHub: https://www.github.com/EXP47
 
 Backend: **Express.js**, **MySQL** and **Supabase**
 
